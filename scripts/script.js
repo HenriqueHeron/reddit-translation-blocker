@@ -18,13 +18,13 @@ async function removeRedditTranslations() {
     targetLang = navigator.language.split('-')[0];
   }
 
-  console.log(`Reddit Translation Blocker is active! Target language: ${targetLang}`);
+  console.log(`Reddit Translation Blocker is active! Current language: ${targetLang}`);
 
   const searchBar = document.querySelector('textarea[class="gLFyf"]');
   const searchBtn = document.querySelector('button[class="HZVG1b Tg7LZd"]');
 
   if (searchBar && searchBar.value.toLowerCase().includes("reddit")) {
-    const redditTlParam = `?tl=${targetLang}`;
+    const redditTlParam = `?tl=`;
     const exclusionParam = `-inurl:${redditTlParam}`;
 
     // Also block the variant without the question mark if it exists (some Google URLs use &tl=)
