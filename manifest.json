@@ -11,12 +11,26 @@
   },
   "content_scripts": [
     {
-      "js": ["scripts/script.js"],
-      "matches": ["https://www.google.com/search*"]
+      "js": [
+        "scripts/script.js"
+      ],
+      "matches": [
+        "https://www.google.com/search*"
+      ]
     }
   ],
-  "permissions": ["activeTab", "scripting"],
-  "background": {
-    "service_worker": "scripts/background.js"
-  }
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/icon-32.png",
+      "32": "images/icon-32.png",
+      "48": "images/icon-48.png",
+      "128": "images/icon-128.png"
+    }
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ]
 }

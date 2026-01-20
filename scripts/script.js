@@ -2,22 +2,61 @@
  * Removes Reddit translations from the search results.
  * @returns {void}
  */
-function removeRedditTranslations() {
-  console.log("my script is running");
+async function removeRedditTranslations() {
+  // Check if blocker is enabled and get target language
+  const result = await chrome.storage.local.get(['blockerEnabled', 'targetLanguage']);
+  const isEnabled = result.blockerEnabled !== false;
 
-  // Select only non-English languages set in the browser
-  const preferredLang = navigator.languages.find((lang) => lang.includes("-") && !lang.startsWith('en'));
+  if (!isEnabled) {
+    console.log("Reddit Translation Blocker is disabled.");
+    return;
+  }
+
+  // Determine target language: stored preference, or browser language, or default to English
+  let targetLang = result.targetLanguage;
+  if (!targetLang) {
+    targetLang = navigator.language.split('-')[0];
+  }
+
+  console.log(`Reddit Translation Blocker is active! Target language: ${targetLang}`);
 
   const searchBar = document.querySelector('textarea[class="gLFyf"]');
   const searchBtn = document.querySelector('button[class="HZVG1b Tg7LZd"]');
 
-  if (searchBar.value.includes("reddit")) {
-    const redditTlParam = `?tl=${preferredLang}`;
-    if (!searchBar.value.includes(redditTlParam)) {
-      searchBar.value = `${searchBar.value} -inurl:${redditTlParam}`;
-      searchBtn.click();
+  if (searchBar && searchBar.value.toLowerCase().includes("reddit")) {
+    const redditTlParam = `?tl=${targetLang}`;
+    const exclusionParam = `-inurl:${redditTlParam}`;
+
+    // Also block the variant without the question mark if it exists (some Google URLs use &tl=)
+    // But ?tl= is the primary one for the "Translate" button results.
+
+    if (!searchBar.value.includes(exclusionParam)) {
+      searchBar.value = `${searchBar.value} ${exclusionParam}`;
+      if (searchBtn) {
+        searchBtn.click();
+      } else {
+        // Fallback: trigger Enter key if button not found
+        searchBar.dispatchEvent(new KeyboardEvent('keydown', {
+          key: 'Enter',
+          code: 'Enter',
+          keyCode: 13,
+          which: 13,
+          bubbles: true
+        }));
+      }
     }
   }
 }
 
+// Observe for AJAX navigation in Google Search
+let lastUrl = location.href;
+new MutationObserver(() => {
+  const url = location.href;
+  if (url !== lastUrl) {
+    lastUrl = url;
+    removeRedditTranslations();
+  }
+}).observe(document, { subtree: true, childList: true });
+
+// Initial run
 removeRedditTranslations();
