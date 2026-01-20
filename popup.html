@@ -15,11 +15,11 @@
     <div class="container">
         <div class="header">
             <img src="images/icon-48.png" alt="Reddit Translation Blocker Icon" class="logo">
-            <h1>Reddit Translation Blocker</h1>
+            <h1 id="popup-title">Reddit Translation Blocker</h1>
         </div>
 
         <div class="status-card">
-            <p id="status-text">Blocker is <span>ON</span></p>
+            <p id="status-label">Blocker is <span id="status-toggle-text">ON</span></p>
             <label class="switch">
                 <input type="checkbox" id="toggle-blocker" checked>
                 <span class="slider round"></span>
@@ -27,7 +27,7 @@
         </div>
 
         <div class="language-card">
-            <p>Target Language:</p>
+            <p id="language-label">Target Language:</p>
             <select id="language-select">
                 <option value="en">English</option>
                 <option value="zh">Chinese</option>
@@ -43,7 +43,7 @@
         </div>
 
         <div class="footer">
-            <p>Making search cleaner! ✨</p>
+            <p id="footer-text">Making search cleaner! ✨</p>
         </div>
     </div>
     <script src="scripts/popup.js"></script>

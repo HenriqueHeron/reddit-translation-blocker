@@ -3,8 +3,8 @@
  * @returns {void}
  */
 async function removeRedditTranslations() {
-  // Check if blocker is enabled and get target language
-  const result = await chrome.storage.local.get(['blockerEnabled', 'targetLanguage']);
+  // Check if blocker is enabled
+  const result = await chrome.storage.local.get(['blockerEnabled']);
   const isEnabled = result.blockerEnabled !== false;
 
   if (!isEnabled) {
@@ -12,13 +12,7 @@ async function removeRedditTranslations() {
     return;
   }
 
-  // Determine target language: stored preference, or browser language, or default to English
-  let targetLang = result.targetLanguage;
-  if (!targetLang) {
-    targetLang = navigator.language.split('-')[0];
-  }
-
-  console.log(`Reddit Translation Blocker is active! Current language: ${targetLang}`);
+  console.log(`Reddit Translation Blocker is active!`);
 
   const searchBar = document.querySelector('textarea[class="gLFyf"]');
   const searchBtn = document.querySelector('button[class="HZVG1b Tg7LZd"]');
